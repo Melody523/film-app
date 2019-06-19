@@ -116,5 +116,24 @@ getSubDistrict() {
 }
 ```
 
+9. 引入h5页面
+* 利用`Vue.mixin( mixin )`的全局注册一个混入，影响注册之后所有创建的每个 Vue 实例。插件作者可以使用混入，向组件注入自定义的行为。
+```
+var global_mixin = {
+	methods: {
+		toDetail (id) {
+			//显示详情
+			let main_webview = plus.webview.getWebviewById('main.html')
+			mui.fire(main_webview, 'webview:switch', { page_id: 'detail.html', film_id: id })				
+		}
+	}
+}
+```
+标签绑定事件`@tap="toDetail(movie.id)`其中`mui`提供了`tap`事件替换了`html5`的`click`事件,解决了300ms延时的问题。
+
+
+## 效果图
+<img src="https://github.com/Melody523/film-app/blob/master/images/%E6%95%88%E6%9E%9C%E5%9B%BE/index_1.jpg" width="200"><img src="https://github.com/Melody523/film-app/blob/master/images/%E6%95%88%E6%9E%9C%E5%9B%BE/index_2.jpg" width="200"><img src="https://github.com/Melody523/film-app/blob/master/images/%E6%95%88%E6%9E%9C%E5%9B%BE/cinema_1.jpg" width="200"><img src="https://github.com/Melody523/film-app/blob/master/images/%E6%95%88%E6%9E%9C%E5%9B%BE/cinema_2.jpg" width="200"><img src="https://github.com/Melody523/film-app/blob/master/images/%E6%95%88%E6%9E%9C%E5%9B%BE/cinema_3.jpg" width="200"><img src="https://github.com/Melody523/film-app/blob/master/images/%E6%95%88%E6%9E%9C%E5%9B%BE/cinema_4.jpg" width="200">
+
 
 

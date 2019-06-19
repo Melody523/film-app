@@ -1,0 +1,905 @@
+<!doctype html>
+<html>
+
+	<head>
+		<meta charset="utf-8">
+		<title></title>
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+		<link href="../css/mui.css" rel="stylesheet" />
+		<script src="../js/mui.js"></script>
+		<style type="text/css">
+			.drop {
+				display: inline-block;
+				position: absolute;
+				top: 18px;
+				width: 0;
+				height: 0;
+				margin-left: 4px;
+				border: 4px solid transparent;
+				border-top-color: #b0b0b0;
+			}
+			
+			.l-drop{
+				display: inline-block;
+				width: 0;
+				height: 0;
+				margin-left: 4px;
+				border: 4px solid transparent;
+				border-top-color: #b0b0b0;
+			}
+			.line-ellipsis {
+				text-overflow: ellipsis;
+				overflow: hidden;
+				white-space: nowrap;
+			}
+
+			.header-container {
+				border-bottom: 1px solid #e6e6e6;
+				width: 100%;
+				height: 43px;
+				background: #f5f5f5;
+				display: flex;
+				align-items: center;
+				justify-content: space-between;
+				position: fixed;
+				top: 0;
+				left: 0;
+				z-index: 999;
+			}
+
+			.header-container .left {
+				padding-left: 15px;
+				font-size: 15px;
+				color: #666;
+				display: flex;
+				align-items: center;
+			}
+
+			.header-container .right {
+				flex: 1;
+				display: flex;
+				justify-content: center;
+				align-items: center;
+				height: 28px;
+				font-size: 13px;
+				color: #b2b2b2;
+				margin-left: 18px;
+				border: .5px solid #e6e6e6;
+				border-radius: 5px;
+				margin-right: 15px;
+				background-color: #fff;
+			}
+
+			.choose-type {
+				width: 100%;
+				height: 40px;
+				z-index: 999;
+				background-color: #fff;
+				position: fixed;
+				top: 45px;
+				left: 0;
+			}
+
+			.choose-type .type-list {
+				display: flex;
+				flex-wrap: nowrap;
+			}
+
+			.choose-type .type-list .active {
+				color: #f03d37;
+			}
+
+			.choose-type .type-list .type-item {
+				flex: 1;
+				text-align: center;
+				line-height: 40px;
+				position: relative;
+				white-space: nowrap;
+				overflow: hidden;
+				font-size: 13px;
+				text-overflow: ellipsis;
+				border-left: 1px solid #e8e8e8;
+			}
+
+			.choose-type .type-list .type-item .active {
+				border-bottom-color: #f03d37;
+				border-top-color: transparent;
+				top: 14px;
+			}
+
+			.cinema-container {
+				margin-top: 85px;
+			}
+
+			.cinema-container .cinema-list {
+				background-color: #fff;
+			}
+
+			.cinema-container .cinema-list .cinema-item {
+				padding: 13px 15px 13px 0;
+				margin-left: 15px;
+				position: relative;
+				overflow: hidden;
+			}
+
+			.cinema-container .cinema-list .cinema-item .title {
+				height: 23px;
+				line-height: 23px;
+				font-size: 16px;
+				color: #000;
+			}
+
+			.cinema-container .cinema-list .cinema-item .title .price-block {
+				padding-top: 9px;
+				padding-left: 3px;
+			}
+
+			.cinema-container .cinema-list .cinema-item .title .price-block .price {
+				color: #f03d37;
+				font-size: 18px;
+			}
+
+			.cinema-container .cinema-list .cinema-item .title .price-block .q {
+				margin-left: 3px;
+				font-size: 11px;
+				color: #f03d37;
+			}
+
+			.location-block {
+				margin-top: 6px;
+				font-size: 13px;
+				color: #666;
+				display: flex;
+			}
+
+			.flex {
+				flex: 1;
+			}
+
+			.location-block .distance {
+				margin-left: 5px;
+			}
+
+			.label-block {
+				height: 17px;
+				line-height: 17px;
+				margin-top: 4px;
+				margin-bottom: 4px;
+				overflow: hidden;
+				font-size: 0;
+				flex-shrink: 0;
+			}
+
+			.label-block div.allowRefund,
+			.label-block div.endorse,
+			.label-block div.hallType,
+			.label-block div.sell {
+				color: #589daf;
+				border: 1px solid #589daf;
+				margin-right: 5px;
+			}
+
+			.label-block div.snack,
+			.label-block div.vipTag {
+				color: #f90;
+				border: 1px solid #f90;
+				margin-right: 5px;
+			}
+
+			.discount-block {
+				color: #999;
+				margin-bottom: 4px;
+				display: flex;
+			}
+
+			.discount-block .discount-label {
+				width: 15px;
+				height: 14px;
+				position: relative;
+				top: 3px;
+				display: inline-flex;
+				margin-right: 5px;
+			}
+
+			.discount-block .discount-label img {
+				width: 100%;
+			}
+
+			.discount-block .discount-label-text {
+				margin-left: 0;
+				font-size: 11px;
+			}
+
+			.label-block>div {
+				position: relative;
+				display: inline-block;
+				padding: 0 3px;
+				height: 15px;
+				line-height: 15px;
+				border-radius: 2px;
+				font-size: .6rem;
+			}
+
+			.filter-cinemas {
+				position: fixed;
+				width: 100%;
+				background: #fff;
+				overflow: scroll;
+				top: 82px;
+				left: 0;
+				z-index: 999;
+			}
+
+			.filter-cinemas .region-container,
+			.filter-cinemas .brand-container,
+			.filter-cinemas .special-container {
+				overflow: auto;
+				z-index: 999;
+			}
+
+			.filter-cinemas .region-container .choose-region {
+				height: 44px;
+				display: flex;
+			}
+
+			.filter-cinemas .region-container .choose-region .title {
+				position: relative;
+				display: inline-block;
+				padding: 0 10px;
+				width: 50%;
+				height: 100%;
+				line-height: 44px;
+				text-align: center;
+			}
+
+			.filter-cinemas .region-container .choose-region .active {
+				color: #f03d37;
+				border-bottom: 2px solid #f03d37;
+			}
+
+			.filter-cinemas .region-container .district-list {}
+
+			.filter-cinemas .region-container .district-list .district-item {
+				display: flex;
+				justify-content: space-between;
+				height: 402.733px;
+
+			}
+
+			.filter-cinemas .region-container .district-list .district-item .list {
+				width: 35%;
+				height: 100%;
+				overflow: scroll;
+			}
+
+			.filter-cinemas .region-container .district-list .district-item .list .active {
+				background: #f5f5f5;
+				color: #f03d37;
+			}
+
+			.filter-cinemas .region-container .district-list .district-item .list .item .left {
+				height: 44px;
+				padding-left: 10px;
+				line-height: 44px;
+				font-size: 14px;
+			}
+
+			.filter-cinemas .region-container .district-list .district-item .right {
+				overflow: scroll;
+				position: relative;
+				width: 65%;
+				height: 100%;
+				background: #f5f5f5;
+			}
+
+			.filter-cinemas .region-container .district-list .district-item .right .right-item {
+				position: relative;
+				height: 45px;
+				line-height: 45px;
+				padding: 0 20px 0 25px;
+				display: flex;
+				justify-content: space-between;
+				align-items: center;
+			}
+
+			.filter-cinemas .region-container .district-list .district-item .right .active {
+				color: #f03d37;
+			}
+
+			.filter-cinemas .region-container .district-list .district-item .right .right-item .title {
+				width: 80%;
+				font-size: 14px;
+				color: #333;
+				text-overflow: ellipsis;
+				white-space: nowrap;
+				overflow: hidden;
+			}
+
+			.filter-cinemas .region-container .district-list .district-item .right .right-item .active {
+				color: #f03d37;
+			}
+
+			.filter-cinemas .region-container .district-list .district-item .list .right .right-item .count {
+				float: right;
+				width: 20px;
+				margin-right: 10px;
+				color: #8f9296;
+				font-size: 12px;
+				text-align: right;
+			}
+
+			.district-scroll {
+				min-height: 100%;
+			}
+
+			.brand-container .brand-list {
+				height: 345.2px;
+			}
+
+			.brand-container .brand-list .brand-item {
+				position: relative;
+				line-height: 44px;
+				height: 44px;
+				border-bottom: 1px solid #e5e5e5;
+				color: #333;
+				display: flex;
+				justify-content: space-between;
+			}
+
+			.brand-container .brand-list .active {
+				color: #f03d37;
+			}
+
+			.brand-container .brand-list .brand-item .info {
+				flex: 1;
+				display: flex;
+				justify-content: space-between;
+			}
+
+			.brand-container .brand-list .brand-item span {
+				margin-right: 15px;
+			}
+
+			.brand-container .brand-list .brand-item .icon {
+				display: block;
+				width: 26px;
+				text-align: right;
+				line-height: 45px;
+			}
+
+			.special-container .special-list {
+				height: 280px;
+				overflow: scroll;
+			}
+
+			.special-container .special-list .special-item {
+				margin: 0 12px 12px;
+			}
+
+			.special-container .special-list .special-item .title {
+				margin-left: 12px;
+				margin-top: 11px;
+				font-size: 15px;
+			}
+
+			.special-container .special-list .special-item .info-list {
+				display: flex;
+				flex-wrap: wrap;
+				margin: 0 12px 12px;
+			}
+
+			.special-container .special-list .special-item .info {
+				width: 21.3%;
+				margin-right: 3%;
+			}
+
+			.special-container .special-list .special-item .info .name {
+				display: flex;
+				align-items: center;
+				justify-content: center;
+				width: 100%;
+				height: 30px;
+				padding: 3px 0;
+				margin-top: 10px;
+				overflow: hidden;
+				text-overflow: ellipsis;
+				white-space: nowrap;
+				border: 1px solid #ccc;
+				border-radius: 5px;
+				font-size: .7rem;
+			}
+
+			.special-container .special-list .special-item .info .active {
+				background: #fcf0f0;
+				color: #f03d37;
+				border: 1px solid #f03d37;
+			}
+
+			.special-container .special-btn {
+				height: 60px;
+				width: 100%;
+				border-top: 1px solid #e5e5e5;
+				margin-top: 10px;
+				background: #fafafa;
+				display: flex;
+				justify-content: space-between;
+			}
+
+			.special-container .special-btn .btn {
+				display: inline-block;
+				height: 34px;
+				width: 21.3%;
+				margin: 13px 11px;
+				border: 1px solid #e5e5e5;
+				border-radius: 6px;
+				text-align: center;
+				line-height: 34px;
+				font-size: 14px;
+			}
+
+			.special-container .special-btn .red {
+				background: #f03d37;
+				border: 1px solid #f03d37;
+				color: #fff;
+			}
+
+			.mask {
+				z-index: 99;
+				position: fixed;
+				top: 0;
+				left: 0;
+				height: 100%;
+				width: 100%;
+				background: rgba(0, 0, 0, .3);
+			}
+		</style>
+	</head>
+
+	<body>
+		<div id="app">
+			<div class="container">
+				<header-container></header-container>
+				<choose-type :choosed-type="choosedType" :change-choosed-type="changeChoosedType"></choose-type>
+				<filter-cinemas :choosed-type="choosedType" :change-choosed-type="changeChoosedType"></filter-cinemas>
+				<cinema-container></cinema-container>
+			</div>
+		</div>
+		<template id="header-container">
+			<div class="header-container">
+				<div class="left">
+					<div >
+						广州
+					</div>
+					<span class="l-drop" ></span>
+				</div>
+				<div class="right">
+					<i class="mui-icon mui-icon-search"></i>
+					<span>
+						搜影院
+					</span>
+				</div>
+			</div>
+		</template>
+		<template id="choose-type">
+			<div class="choose-type">
+				<div class="type-list">
+					<div class="type-item" v-for="item in typeList" :key="item.id" :class="{'active': choosedType===item.type}" @tap="changeChoosedType(item.type)">
+						{{item.title}}
+						<span class="drop" :class="{'active': choosedType===item.type}"></span>
+					</div>
+				</div>
+			</div>
+		</template>
+		<template id="filter-cinemas">
+			<div class="filter">
+				<div class="mask" v-if="choosedType != ''" @tap="changeChoosedType('')"></div>
+				<div class="filter-cinemas">
+					<div class="region-container" v-if="choosedType==='region'">
+						<div class="choose-region">
+							<div class="title" :class="{'active':regionChoose==='district' }" @tap="changeRegionChoose('district')">
+								商区
+							</div>
+							<div class="title" :class="{'active':regionChoose==='subway' }" @tap="changeRegionChoose('subway')">
+								地铁站
+							</div>
+						</div>
+						<div class="district-list" v-if="regionChoose==='district'">
+							<div class="district-item">
+								<div class="list">
+									<div class="district-scroll">
+										<div @tap="changeDistrictId(item.id, item.name)" class="item" v-for="item in district" :key="item.id" :class="{'active':item.id===districtId}">
+											<div class="left">
+												{{item.name}}({{item.count}})
+											</div>
+										</div>
+									</div>
+								</div>
+								<div class="right">
+									<div class="district-scroll">
+										<div @tap="changeSubDistrictId(sub.id, sub.name)" class="right-item" v-for="sub in subDistrict" :key="sub.id" :class="{'active':subDistrictId===sub.id}">
+											<span class="mui-icon mui-icon-checkmarkempty" v-if="subDistrictId===sub.id"></span>
+											<span class="title" :class="{'active':subDistrictId===sub.id}">{{sub.name}}</span>
+											<span class="count">{{sub.count}}</span>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+						<div class="district-list" v-else>
+							<div class="district-item">
+								<div class="list">
+									<div class="district-scroll">
+										<div @tap="changeSubwayId(item.id, item.name)" class="item" v-for="item in subway" :key="item.id" :class="{'active':item.id===subwayId}">
+											<div class="left">
+												{{item.name}}({{item.count}})
+											</div>
+										</div>
+									</div>
+								</div>
+								<div class="right">
+									<div class="district-scroll">
+										<div @tap="changeSubSubwayId(sub.id, sub.name)" class="right-item" v-for="sub in subSubway" :key="sub.id" :class="{'active':subSubwayId===sub.id}">
+											<span class="mui-icon mui-icon-checkmarkempty" v-if="subSubwayId===sub.id"></span>
+											<span class="title" :class="{'active':subSubwayId===sub.id}">{{sub.name}}</span>
+											<span class="count">{{sub.count}}</span>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class="brand-container" v-else-if="choosedType==='brand'">
+						<div class="brand-list">
+							<div class="brand-item" @tap="changeBrandId(item.id, item.name)" v-for="item in brand" :key="item.id" :class="{'active': brandId===item.id}">
+								<span class="icon" :class="{'mui-icon mui-icon-checkmarkempty ': brandId===item.id}"></span>
+								<div class="info">
+									<span class="title">{{item.name}}</span>
+									<span class="count">{{item.count}}</span>
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class="special-container" v-else-if="choosedType==='special'">
+						<div class="special-list">
+							<div class="special-item">
+								<div class="title">
+									特色功能
+								</div>
+								<div class="info-list">
+									<div class="info" v-for="item in service" :key="item.id" @tap="changeServiceId(item.id)">
+										<div class="name" :class="{'active':serviceId===item.id}">{{item.name}}</div>
+									</div>
+								</div>
+							</div>
+							<div class="special-item">
+								<div class="title">
+									特殊厅
+								</div>
+								<div class="info-list">
+									<div class="info" v-for="item in hallType" :key="item.id" @tap="changeHallTypeId(item.id)">
+										<div class="name" :class="{'active':hallTypeId===item.id}">{{item.name}}</div>
+									</div>
+								</div>
+
+							</div>
+						</div>
+						<div class="special-btn">
+							<span class="btn" @tap="reSetSpecial()">重置</span>
+							<span class="btn red" @tap="confirmSpecial(serviceId, hallTypeId)">确定</span>
+						</div>
+					</div>
+				</div>
+			</div>
+		</template>
+		<template id="cinema-container">
+			<div class="cinema-container">
+				<div class="cinema-list">
+					<div class="cinema-item" v-for="item in cinemaList" :key="item.id">
+						<div class="title line-ellipsis">
+							<span>{{item.nm}}</span>
+							<span class="price-block">
+								<span class="price">{{item.sellPrice}}</span><span class="q">元起</span>
+							</span>
+						</div>
+						<div class="location-block box-flex">
+							<div class="flex line-ellipsis">{{item.addr}}</div>
+							<div class="distance">{{item.distance}}</div>
+						</div>
+						<div class="label-block">
+							<div class="endorse" v-show="item.tag.endorse===1">改签</div>
+							<div class="snack" v-show="item.tag.snack===1">小吃</div>
+							<div class="vipTag" v-show="item.tag.vipTag==='折扣卡'">折扣卡</div>
+							<div class="allowRefund" v-show="item.tag.allowRefund===1">退</div>
+							<div class="hallType" v-for="(tag, index) in item.tag.hallType" :key="index">
+								{{tag}}
+							</div>
+						</div>
+						<div class="discount-block" v-show="item.tag.vipTag==='折扣卡'">
+							<div class="discount-label normal card">
+								<img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAeCAYAAABNChwpAAAAAXNSR0IArs4c6QAAAgFJREFUSA3Nlz1LA0EQhmf3kouFEQwi+FEYQ+xEsImFoCDoL/CLaKd/QbC0sbCzFVuxsRS1jEVAsUqrIILRQAhaBGKMuawzwpGAm83mNhddCHfZnd3n3Z2ZuxsG2JI3YtQpVw6AiTkhYJj6/GqMwSsIdm312DsnMyzLCF79rGRAiIhfUOm6jL0FQvZU4Gfn0GU4KcINE5vjsc9LFXajE9kcfT7UDZaMQWwuG9Dpi/YyiIWZjqnSxrOAtWgANsYDysV1Bj0L0Flcx8ZoC1F0wf50UMo5fqjCY1FIxxo7jQSUHWgK+ag2YprfGwnIlQTQTk3a/46B2UEOIUu+v0gIIMgZLLTIZHJTOl+TL4K9ShckMc36Q+pc356QB6FLLJQFCqi4f39d2WoKLTy03ckg2OjAvcyXh9n1KX8eA0YC4n0MtuLoJru+o3bvjAS8o2vpfXCYsGEzZkFYHQ5SbcoglM5o6KQAoxhIDHBYiVqYERZcZB04f3aghNGv04wEuIDbQg3u8Lc4YsHymAVLeD17cuDypbWKjgggIZTpVwhM5x1YxzdlpaaXXB0T4J5GEbPy6F7/8WwUhC7U5OpZgIPfU5qnrNTn+UmoXLWNQc8n0AZDacqxUskpLXwcJDbHMinlI0O9NLI51WiAZZLa0odRZBKbU4FINRoDdtoNdxCDWMQk9jePWpE8hVOLbwAAAABJRU5ErkJggg=="
+								 alt="">
+							</div>
+							<div class="discount-label-text">{{item.promotion.cardPromotionTag}}</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</template>
+		<script src="../js/vue.js" type="text/javascript" charset="utf-8"></script>
+		<script src="../js/axios.js" type="text/javascript" charset="utf-8"></script>
+		<script type="text/javascript">
+			let app = new Vue();
+			Vue.component('header-container', {
+				template: '#header-container'
+			})
+			Vue.component('choose-type', {
+				template: '#choose-type',
+				props: ['choosedType', 'changeChoosedType'],
+				data() {
+					return {
+						typeList: [{
+								id: 1,
+								title: '全城',
+								type: 'region'
+							},
+							{
+								id: 2,
+								title: '品牌',
+								type: 'brand'
+							},
+							{
+								id: 3,
+								title: '特色',
+								type: 'special'
+							}
+						]
+					}
+				},
+				mounted(){
+					app.$on('brandName', (arr) => {
+						this.typeList[arr[0]].title = arr[1];
+					});
+					app.$on('DistrictName', (arr) => {
+						this.typeList[arr[0]].title = arr[1];
+					});
+				}
+			})
+			Vue.component('filter-cinemas', {
+				template: '#filter-cinemas',
+				props: ['choosedType', 'changeChoosedType'],
+				data() {
+					return {
+						brand: [],
+						district: [],
+						hallType: [],
+						service: [],
+						subway: [],
+						districtId: -1,
+						subDistrictId: -1,
+						subDistrict: [],
+						regionChoose: 'district',
+						subwayId: -1,
+						subSubwayId: -1,
+						subSubway: [],
+						brandId: -1,
+						serviceId: -1,
+						hallTypeId: -1,
+						chooseServiceId: -1,
+						chooseHallTypeId: -1,
+						districtTitle: '全城'
+					}
+				},
+				created() {
+					this.getfilterCinemas(() => {
+						this.getSubDistrict();
+						this.getSubSubway();
+					});
+				},
+				methods: {
+					getfilterCinemas(callback) {
+						axios.get('http://m.maoyan.com/ajax/filterCinemas?ci=20').then(res => {
+							this.district = res.data.district.subItems;
+							this.subway = res.data.subway.subItems;
+							this.brand = res.data.brand.subItems;
+							this.service = res.data.service.subItems;
+							this.hallType = res.data.hallType.subItems;
+							callback();
+						})
+					},
+					getSubDistrict() {
+						this.subDistrict = this.district.filter((item) => {
+							return item.id === this.districtId
+						})[0].subItems;
+					},
+					getSubSubway() {
+						this.subSubway = this.subway.filter((item) => {
+							return item.id === this.subwayId
+						})[0].subItems;
+					},
+					changeDistrictId(id, name) {
+						this.districtId = id;
+						if(id===-1){
+							this.districtTitle = '全城';
+							this.changeChoosedType('');
+							app.$emit('subDistrictId', this.districtId);
+							app.$emit('DistrictName', [0, '全城']);
+						} else {
+							this.districtTitle = name;
+						}
+						this.subDistrictId = -1;
+						this.getSubDistrict();
+					},
+					changeSubwayId(id, name) {
+						this.subwayId = id;
+						if(id===-1){
+							this.changeChoosedType('');
+							app.$emit('lineId', this.subwayId);
+							app.$emit('DistrictName', [0, this.districtTitle]);
+						} else {
+							this.districtTitle = name;
+						}
+						this.subSubwayId = -1;
+						this.getSubSubway();
+					},
+					changeSubDistrictId(id, name) {
+						this.subDistrictId = id;
+						if(id===-1){
+							id = this.districtId;
+							name = this.districtTitle;
+						} 
+						app.$emit('subDistrictId', id);
+						app.$emit('DistrictName', [0, name]);
+						this.changeChoosedType('');
+					},
+					changeSubSubwayId(id, name) {
+						this.subSubwayId = id;
+						if(id === -1) {
+							name = this.districtTitle;
+						}
+						app.$emit('stationId', [this.subwayId, id]);
+						app.$emit('DistrictName', [0, name]);
+						this.changeChoosedType('');
+					},
+					changeBrandId(id, name) {
+						this.brandId = id;
+						app.$emit('brandId', this.brandId);
+						app.$emit('brandName', [1, name]);
+						this.changeChoosedType('');
+					},
+					changeRegionChoose(type) {
+						this.regionChoose = type;
+					},
+					changeServiceId(id) {
+						this.serviceId = id;
+					},
+					changeHallTypeId(id) {
+						this.hallTypeId = id;
+					},
+					reSetSpecial() {
+						this.serviceId = -1;
+						this.hallTypeId = -1;
+						this.chooseServiceId = -1;
+						this.chooseHallTypeId = -1;
+					},
+					confirmSpecial(serviceId, hallTypeId) {
+						this.chooseServiceId = serviceId;
+						this.chooseHallTypeId = hallTypeId;
+						app.$emit('SpecialId', [this.chooseServiceId, this.chooseHallTypeId]);
+						this.changeChoosedType('');
+					}
+				}
+			})
+			Vue.component('cinema-container', {
+				template: '#cinema-container',
+				data() {
+					return {
+						cinemaList: [],
+						offset: 0,
+						total: 0,
+						subDistrictId: -1,
+						stationId: -1,
+						lineId: -1,
+						brandId: -1,
+						serviceId: -1,
+						hallTypeId: -1,
+						dateStr: ''
+					}
+				},
+				mounted(){
+					app.$on('subDistrictId', (subDistrictId) => {
+						this.subDistrictId = subDistrictId;
+						this.getCinemaList();
+					});
+					app.$on('lineId', (lineId) => {
+						this.lineId = lineId;
+						this.getCinemaList();
+					});
+					app.$on('stationId', (arr) => {
+						this.lineId = arr[0];
+						this.stationId = arr[1];
+						this.getCinemaList();
+					});
+					app.$on('brandId', (brandId) => {
+						this.brandId = brandId;
+						this.getCinemaList();
+					});
+					app.$on('SpecialId', (SpecialId) => {
+						this.serviceId = SpecialId[0];
+						this.hallTypeId = SpecialId[1];
+						this.getCinemaList();
+					});
+				},
+				created() {
+					this.getCinemaList();
+					this.initRefresh();
+				},
+				methods: {
+					getCinemaList() {
+						let date = new Date();
+						let month = date.getMonth() + 1 
+						month = month >= 10 ? month : '0'+ month;
+						let day = date.getDate()>=10 ? date.getDate():'0' + date.getDate();
+						let year = date.getFullYear();
+						this.dateStr = year+'-'+ month + '-' + day;
+						axios.get('http://m.maoyan.com/ajax/cinemaList?day='+this.dateStr+'&offset=' + this.offset +
+								'&limit=20&districtId='+this.subDistrictId+'&lineId='+this.lineId+'&hallType='+this.hallTypeId+
+								'&brandId='+this.brandId+'&serviceId='+this.serviceId+'&areaId=-1&stationId='+this.stationId+
+								'&item=&updateShowDay=true&reqId=1559962642215&cityId=20'
+							)
+							.then(res => {
+								this.cinemaList = res.data.cinemas;
+								this.total = res.data.paging.total;
+							})
+					},
+					initRefresh() { //配置拉动刷新的操作
+						mui.init({
+							pullRefresh: {
+								container: '#app',
+								up: {
+									contentrefresh: '正在加载...',
+									callback: this.pullUpHandler
+								}
+							}
+						})
+					},
+					pullUpHandler() { //上拉加载的处理函数
+						this.offset++;
+						//根据新页数获取数据之后还原刷新样式
+						this.getMoreCinema((hasMore) => {
+							mui('#app').pullRefresh().endPullupToRefresh(!hasMore);
+						})
+					},
+					getMoreCinema(callback) {
+						let val = this.offset * 20;
+						axios.get('http://m.maoyan.com/ajax/cinemaList?day='+this.dateStr+'&offset=' + this.offset +
+								'&limit=20&districtId='+this.subDistrictId+'&lineId='+this.lineId+'&hallType='+this.hallTypeId+
+								'&brandId='+this.brandId+'&serviceId='+this.serviceId+'&areaId=-1&stationId='+this.stationId+
+								'&item=&updateShowDay=true&reqId=1559962642215&cityId=20'
+							)
+							.then(res => {
+								this.cinemaList = [...this.cinemaList, ...res.data.cinemas];
+								let hasMore = this.total - this.cinemaList.length > 0;
+								callback(hasMore)
+							})
+					}
+				}
+			})
+			new Vue({
+				el: '#app',
+				data: {
+					choosedType: ''
+				},
+				methods: {
+					changeChoosedType(type) {
+						if (type === this.choosedType) {
+							this.choosedType = '';
+						} else {
+							this.choosedType = type;
+						}
+					}
+				}
+			})
+		</script>
+	</body>
+
+</html>

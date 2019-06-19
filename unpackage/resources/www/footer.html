@@ -1,0 +1,73 @@
+<!doctype html>
+<html>
+
+	<head>
+		<meta charset="utf-8">
+		<title></title>
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+		<link href="css/mui.css" rel="stylesheet" />
+		<script src="js/mui.js"></script>
+	</head>
+	<style type="text/css">
+		.footer-list{
+			width: 100%;
+			display: -ms-flexbox;
+			display: flex;
+			align-items: center;
+			justify-content: space-between;
+			height: 50px;
+			padding: 0;
+			margin: 0;
+			z-index: 100;
+			background: #fff;
+		}
+		.footer-item{
+			width: 25%;
+			height: 50px;
+			text-align: center;
+			display: flex;
+			flex-direction: column;
+			justify-content: space-around;
+		}
+		.footer-item .title{
+			font-size: 14px;
+		}
+		.active {
+			color: #ff5f16;
+		}
+	</style>
+	<body>
+		<div id="app">
+			<div class="footer-list">
+				<div @tap={handleChangeActive(item.page)} class="footer-item" :class="{'active':activePage===item.page}" v-for="(item, key) in footerList" :key="item.id">
+					<i :class="item.className"></i>
+					<span class="title">{{item.title}}</span>
+				</div>
+			</div>
+		</div>
+		<script type="text/javascript" src="js/vue.js"></script>
+		<script type="text/javascript">
+			new Vue({
+				el: '#app',
+				data: {
+					footerList: [
+						{id: 1, className: 'mui-icon mui-icon-videocam', title: '电影', page: 'film.html'},
+						{id: 2, className: 'mui-icon mui-icon-image', title: '影院', page: 'cinema.html'},
+						{id: 3, className: 'mui-icon mui-icon-star', title: '特惠', page: 'discount.html'},
+						{id: 4, className: 'mui-icon mui-icon-contact', title: '我的', page: 'mine.html'}
+					],
+					activePage: 'film.html'
+				},
+				methods: {
+					handleChangeActive(page_id) {
+						let index_webview = plus.webview.getLaunchWebview();
+						let main_webview = plus.webview.getWebviewById('main.html');
+						mui.fire(main_webview, 'webview:switch', {page_id});
+						this.activePage = page_id;
+					}
+				}
+			})
+		</script>
+	</body>
+
+</html>

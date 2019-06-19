@@ -1,0 +1,187 @@
+<!doctype html>
+<html>
+
+	<head>
+		<meta charset="utf-8">
+		<title></title>
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+		<link href="../css/mui.css" rel="stylesheet" />
+		<script src="../js/mui.js"></script>
+		<style type="text/css">
+			.info-box {
+				position: relative;
+			}
+
+			.info-box .info {
+				background-image: url('http://s0.meituan.net/bs/file/?f=myfe/canary:static/deploy/dpmmweb/client/dpmmweb/component/mycenter/img/bg.png');
+				background-size: 100% 100%;
+				height: 250px;
+				width: 100%;
+				display: flex;
+				flex-direction: column;
+				align-items: center;
+				justify-content: space-around;
+			}
+
+			.info-box .info .info-img {
+				width: 66px;
+				height: 66px;
+				border-radius: 50%;
+				background-color: #fff;
+				margin-top: 50px;
+			}
+
+			.info-box .info .info-img img {
+				width: 66px;
+				height: 66px;
+				border-radius: 50%;
+			}
+
+			.info-box .info .info-name {}
+
+			.info_desc {
+				margin-bottom: 50px;
+				color: #fff;
+			}
+
+			.info-box .info .info-name .btn {
+				height: 27px;
+				line-height: 28px;
+				padding: 0 10px;
+				text-align: center;
+				box-sizing: border-box;
+				border: 1px solid #fff;
+				color: #e54847;
+				background-color: #fff;
+				border-radius: 4px;
+				white-space: nowrap;
+				font-size: 16px;
+				cursor: pointer;
+			}
+
+			.more {
+				position: absolute;
+				top: 10px;
+				right: 10px;
+				color: #fff;
+				font-size: 20px;
+			}
+		</style>
+	</head>
+
+	<body>
+		<div id="app">
+			<div class="info-box">
+				<div class="info">
+					<div class="info-img" @tap="changeProfile">
+						<img v-if="user_info.name" :src="user_info.profile_image_url">
+					</div>
+					<div class="info-name">
+						<div v-if="user_info.name" class="btn">{{user_info.name}}</div>
+						<div v-else @tap="login" class="btn">登录</div>
+					</div>
+					<p class="info_desc">{{user_info.description}}</p>
+				</div>
+				<span v-if="user_info.name" class="mui-icon mui-icon-more more" @tap="more"></span>
+			</div>
+		</div>
+		<script src="../js/vue.js" type="text/javascript" charset="utf-8"></script>
+		<script type="text/javascript">
+			new Vue({
+						el: '#app',
+						data: {
+							user_info: {}
+						},
+						methods: {
+							login() {
+								let main_webview = plus.webview.getWebviewById('main.html');
+								mui.fire(main_webview, 'webview:switch', {
+									page_id: 'login.html'
+								});
+							},
+							more() {
+								let actionsheetStyle = {
+									title: '更多操作',
+									cancle: '取消',
+									buttons: [{
+										title: '退出登陆'
+									}, {
+										title: '切换账号'
+									}]
+								}
+								plus.nativeUI.actionSheet(actionsheetStyle, (e) => {
+									switch (e.index) {
+										case 1:
+											this.exit();
+											break;
+										case 2:
+											this.login();
+											break;
+									}
+								})
+							},
+							exit() {
+								localStorage.removeItem('user_info');
+								this.user_info = {}
+							},
+							changeProfile() {
+									let actionsheetStyle = {
+										title: '修改头像',
+										cancle: '取消',
+										buttons: [{
+											title: '拍照'
+										}, {
+											title: '相册选取' 
+										}]
+									};
+									plus.nativeUI.actionSheet(actionsheetStyle, (e) => {
+										switch (e.index) {
+											case 1:
+												this.capture();
+												break;
+											case 2:
+												this.PickInPhoto();
+												break;
+										}
+									})
+								},
+								capture() {
+									var cmr = plus.camera.getCamera();
+									var res = cmr.supportedImageResolutions[0];
+									var fmt = cmr.supportedImageFormats[0];
+									cmr.captureImage(function(path) {
+										this.handlePicPath(path)
+									}, {
+										resolution: res,
+										format: fmt
+									});
+								},
+								PickInPhoto() {
+									plus.gallery.pick((path) => { this.handlePicPath(path) });
+								},
+								handlePicPath(path) {
+									plus.io.resolveLocalFileSystemURL(path, (entry) => {
+										var imgSrc = entry.toLocalURL() + "?version=" + new Date().getTime(); //拿到图片路径
+										this.handleHeadImg(imgSrc)
+									});
+								},
+								handleHeadImg(imgsrc) {
+									//在这里应该先去上传图片，然后使用服务器上的图片地址
+									this.user_info.profile_image_url = imgsrc
+									localStorage.user_info = JSON.stringify(this.user_info)
+								}
+
+							},
+							created() {
+								this.user_info = JSON.parse(localStorage.user_info || {})
+							},
+							mounted() {
+								window.addEventListener('userinfo:change', (e) => {
+									this.user_info = JSON.parse(localStorage.user_info);
+								})
+							}
+						})
+		</script>
+	</body>
+
+</html>

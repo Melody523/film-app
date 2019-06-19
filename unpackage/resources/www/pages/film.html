@@ -1,0 +1,454 @@
+<!doctype html>
+<html>
+
+	<head>
+		<meta charset="utf-8">
+		<title></title>
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+		<link href="../css/mui.css" rel="stylesheet" />
+		<script src="../js/mui.js"></script>
+		<style type="text/css">
+			.header-container {
+				border-bottom: 1px solid #e6e6e6;
+				height: 44px;
+				display: flex;
+				justify-content: space-around;
+				align-items: center;
+				position: fixed;
+				top: 0;
+				width: 100%;
+				background-color: #e5e5e5;
+				z-index: 99;
+			}
+
+			.header-container .left {
+				padding-left: 15px;
+				font-size: 15px;
+				color: #666;
+				min-width: 50px;
+				margin: 0 20px;
+			}
+
+			.header-container .center {
+				display: flex;
+				flex: 1;
+				justify-content: center;
+			}
+
+			.header-container .center .hot-item {
+				font-size: 15px;
+				color: #666;
+				width: 80px;
+				text-align: center;
+				margin: 0 12px;
+				font-weight: 700;
+				height: 44px;
+				line-height: 44px;
+			}
+
+			.header-container .center .acitve {
+				color: #ef4238;
+				border-bottom: 2px solid #ef4238;
+			}
+
+			.header-container .right {
+				display: block;
+				width: 20px;
+				height: 20px;
+				margin: 0 20px 0 30px;
+			}
+
+			.movie_container {
+				padding-left: 15px;
+				background-color: #fff;
+				width: 100%;
+			}
+			.movie_position{
+				margin-top: 45px;
+				z-index: -1;
+			}
+			.movie_container .movie_item {
+				display: flex;
+				align-items: center;
+				padding: 12px 14px 12px 0;
+				height: 114px;
+				max-height: 114px;
+				margin-bottom: 3px;
+				background-color: #fff;
+			}
+
+			.movie_container .movie_item .left {
+				background-color: #e1e1e1;
+				background-size: 100% 100%;
+			}
+
+			.movie_container .movie_item .left img {
+				height: 90px;
+				width: 64px;
+				display: block;
+			}
+
+			.movie_container .movie_item .center {
+				padding: 12px 14px 12px 10px;
+				height: 114px;
+				max-height: 114px;
+				width: 70%;
+			}
+
+			.movie_container .movie_item .center .title {
+				font-size: 17px;
+				color: #333;
+				font-weight: 700;
+				padding-right: 5px;
+				text-overflow: ellipsis;
+				overflow: hidden;
+				white-space: nowrap;
+			}
+
+			.movie_container .movie_item .center .grade {}
+
+			.movie_container .movie_item .center .grade span {
+				font-size: 13px;
+				color: #666;
+			}
+
+			.movie_container .movie_item .center .grade .count {
+				font-weight: 700;
+				color: #faaf00;
+				font-size: 15px;
+			}
+
+			.movie_container .movie_item .center p {
+				font-size: 13px;
+				color: #666;
+				margin-top: 6px;
+				line-height: 15px;
+				text-overflow: ellipsis;
+				overflow: hidden;
+				white-space: nowrap;
+			}
+			
+			.right .btn{
+				width: 47px;
+				height: 27px;
+				line-height: 28px;
+				text-align: center;
+				box-sizing: border-box;
+				color: #fff;
+				border-radius: 4px;
+				white-space: nowrap;
+				font-size: 12px;
+				cursor: pointer;
+			}
+			
+			.right .buy_btn {
+				background-color: #f03d37;
+			}
+
+			.right .want_btn {
+				background-color: #3c9fe6;
+			}
+			.right .watch_btn {
+				background-color: #faaf00;
+			}
+
+			.movies-coming {
+				margin-top: 45px;
+				z-index: -1;
+			}
+
+			.movies-coming .expected-container {
+				padding: 12px 0 12px 10px;
+				background-color: #fff;
+				margin-bottom: 10px;
+			}
+
+			.movies-coming .expected-container .expected-title {
+				margin: 0 0 12px;
+				font-size: 14px;
+				color: #333;
+			}
+			.movies-coming .expected-container .expected-list{
+				overflow-x: scroll;
+				display: flex;
+				flex-wrap: nowrap;
+			}
+			.movies-coming .expected-container .expected-item {
+				margin-right: 12px;
+				white-space: nowrap;
+				width: 85px;
+			}
+
+			.movies-coming .expected-container .expected-item .img-info {
+				width: 85px;
+				height: 115px;
+				position: relative;
+				margin-bottom: 6px;
+			}
+			
+			.movies-coming .expected-container .expected-item .img-info img {
+				width: 85px;
+				height: 115px;
+				z-index: -1;
+			}
+			
+			.movies-coming .expected-container .expected-item .img-info .want-count {
+				position: absolute;
+				left: 4px;
+				bottom: 2px;
+				color: #faaf00;
+				font-size: 11px;
+				font-weight: 600;
+			}
+
+			.movies-coming .expected-container .expected-item .content-info {}
+
+			.movies-coming .expected-container .expected-item .content-info .title {
+				margin: 0 0 3px;
+				padding: 0;
+				font-size: 13px;
+				color: #222;
+				text-overflow: ellipsis;
+				overflow: hidden;
+				white-space: nowrap;
+			}
+
+			.movies-coming .expected-container .expected-item .content-info .desc {
+				margin: 0;
+				padding: 0;
+				font-size: 12px;
+				color: #999;
+			}
+		</style>
+	</head>
+
+	<body>
+		<div id="app">
+			<header-container :list="header_list" :choose-type="choose_type" :change-type="changeType"></header-container>
+			<movie_container :choose-type="choose_type"></movie_container>
+		</div>
+		<template id="header-container">
+			<div class="header-container">
+				<div class="left">
+					广州ˇ
+				</div>
+				<div class="center">
+					<div @tap="changeType(item.type)" class="hot-item" :class="{'acitve': chooseType===item.type}" v-for="(item, index) in list"
+					 :key="item.id">
+						{{item.title}}
+					</div>
+				</div>
+				<div class="right">
+					<i class="mui-icon mui-icon-search"></i>
+				</div>
+			</div>
+		</template>
+		<template id="movie_container">
+			<div id="movie_content" class="movie_container movie_position">
+				<movie_item :choose-type="chooseType"></movie_item>
+				<movies-coming :choose-type="chooseType"></movies-coming>
+			</div>
+		</template>
+		<template id="movie_item">
+			<div class="movie_item" id="movies-list" v-for="movie in movies_list" :key="movie.id" v-if="chooseType==='now_palying'">
+				<div class="left">
+					<img :src="movie.img | img_src">
+				</div>
+				<div class="center">
+					<div class="title">{{movie.nm}}</div>
+					<div v-if="movie.sc!==0" class="grade">
+						<span>观众评</span>
+						<span class="count">{{movie.sc}}</span>
+					</div>
+					<div v-else class="grade">
+						<span class="count">{{movie.wish}}</span>
+						<span>人想看</span>
+					</div>
+					<p>{{movie.star}}</p>
+					<p>{{movie.showInfo}}</p>
+				</div>
+				<div class="right">
+					<div v-if="movie.sc!==0" class="buy_btn btn">
+						购票
+					</div>
+					<div v-else class="want_btn btn">
+						预售
+					</div>
+				</div>
+			</div>
+		</template>
+		<template id="movies-coming">
+			<div class="movies-coming movie_position" v-if="chooseType==='coming-soon'">
+				<div class="expected-container">
+					<p class="expected-title">近期最受期待</p>
+					<div class="expected-list">
+						<div class="expected-item" v-for="item in expected_list" :key="item.id">
+							<div class="img-info">
+								<img :src="item.img | expected_img">
+								<div class="want-count">
+									{{item.wish}}想看
+								</div>
+							</div>
+							<div class="content-info">
+								<p class="title">{{item.nm}}</p>
+								<p class="desc">{{item.comingTitle}}</p>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="movie_container">
+					<div class="movie_item" v-for="movie in coming_lsit" :key="movie.id">
+						<div class="left">
+							<img :src="movie.img | img_src">
+						</div>
+						<div class="center">
+							<div class="title">{{movie.nm}}</div>
+							<div class="grade">
+								<span class="count">{{movie.wish}}</span>
+								<span>人想看</span>
+							</div>
+							<p>{{movie.star}}</p>
+							<p>{{movie.showInfo}}</p>
+						</div>
+						<div class="right">
+							<div v-if="movie.showst===1" class="watch_btn btn">
+								想看
+							</div>
+							<div v-else class="want_btn btn">
+								预售
+							</div>
+						</div>
+					</div>
+			</div>
+		</template>
+		<script src="../js/vue.js" type="text/javascript" charset="utf-8"></script>
+		<script src="../js/axios.js" type="text/javascript" charset="utf-8"></script>
+		<script src="../js/axios.js" type="text/javascript" charset="utf-8"></script>
+		<script type="text/javascript">
+			Vue.filter('img_src', (value) => {
+				let img = value.replace(/w.h/, '128.180');
+				return img;
+			})
+			Vue.filter('expected_img', (value) => {
+				let img = value.replace(/w.h/, '170.230');
+				return img;
+			})
+			Vue.component('header-container', {
+				template: '#header-container',
+				props: ['list', 'chooseType', 'changeType'],
+				data() {
+					return {
+
+					}
+				}
+
+			})
+			Vue.component('movie_container', {
+				template: '#movie_container',
+				props: ['chooseType'],
+			})
+			Vue.component('movie_item', {
+				template: '#movie_item',
+				props: ['chooseType'],
+				data() {
+					return {
+						movies_list: [],
+						test_list: [],
+						movies_id: [],
+						page: 1
+					}
+				},
+				created() {
+					this.getMoviesList();
+					this.initRefresh();
+				},
+				methods: {
+					getMoviesList() {
+						axios.get('http://m.maoyan.com/ajax/movieOnInfoList?token=').then(res => {
+							this.movies_list = res.data.movieList;
+							this.movies_id = res.data.movieIds;
+						})
+					},
+					initRefresh () { //配置拉动刷新的操作
+						mui.init({
+							pullRefresh: {
+								container: '#movie_content',
+								up: {
+									contentrefresh: '正在加载...',
+									callback: this.pullUpHandler
+								}
+							}
+						});	
+					},
+					pullUpHandler () { //上拉加载的处理函数
+						this.page++;
+						//根据新页数获取数据之后还原刷新样式
+						this.getMoviesLists((hasMore) => {
+							mui('#movie_content').pullRefresh().endPullupToRefresh(!hasMore);
+						})
+					},
+					getMoviesLists (callback) {
+						let str = this.movies_id.splice((this.page-1)*12, 12).join('%2C');
+						axios.get('http://m.maoyan.com/ajax/moreComingList?token=&movieIds='+str).then(res => {
+							this.movies_list = [...this.movies_list, ...res.data.coming];
+							let hasMore = this.movies_id.length - this.movies_list.length > 0;
+							callback(hasMore)
+						})
+					}
+				}
+			})
+			Vue.component('movies-coming', {
+				template: '#movies-coming',
+				props: ['chooseType'],
+				data() {
+					return {
+						expected_list: [],
+						coming_lsit: [],
+						test_list: [],
+						offset: 0
+					}
+				},
+				created() {
+					this.getExpectedList();
+					this.getComingList();
+				},
+				methods: {
+					getExpectedList() {
+						axios.get('http://m.maoyan.com/ajax/mostExpected?ci=20&limit=10&offset='+this.offset+'&token=').then(res => {
+							this.expected_list = res.data.coming;
+						})
+					},
+					getComingList() {
+						axios.get('http://m.maoyan.com/ajax/comingList?ci=20&token=&limit=10').then(res => {
+							this.coming_lsit = res.data.coming;
+						})
+					}
+				}
+			})
+			new Vue({
+				el: '#app',
+				data: {
+					header_list: [{
+							id: 1,
+							title: '正在热映',
+							type: 'now_palying'
+						},
+						{
+							id: 2,
+							title: '即将上映',
+							type: 'coming-soon'
+						},
+					],
+					choose_type: 'now_palying'
+				},
+				methods: {
+					changeType(type) {
+						this.choose_type = type
+					},
+				}
+
+			})
+		</script>
+	</body>
+
+</html>

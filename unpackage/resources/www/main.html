@@ -1,0 +1,57 @@
+<!doctype html>
+<html>
+
+	<head>
+		<meta charset="utf-8">
+		<title></title>
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+		<link href="css/mui.css" rel="stylesheet" />
+		<script src="js/mui.js"></script>
+		<style type="text/css">
+			
+		</style>
+	</head>
+	<body>
+		
+		<script type="text/javascript">
+			(function ($, doc) {
+				$.plusReady(function() {
+					let self = plus.webview.currentWebview();
+					let contents = ['film.html', 'cinema.html', 'discount.html', 'mine.html'];
+					let webview_obj = createContentWebview();
+					let active_webview_id = contents[0];
+					showWebviewById(active_webview_id);
+					window.addEventListener('webview:switch', (e)=>{
+						let id = e.detail.page_id;
+						if(active_webview_id === id) return false;
+						active_webview_id=id
+						showWebviewById(id);
+					})
+					
+					function showWebviewById(id) {
+						hideAllWebview();
+						webview_obj[id].show();
+					}
+					
+					function hideAllWebview() {
+						for(let key in webview_obj) {
+							webview_obj[key].hide();
+						}
+					}
+
+					function createContentWebview() {
+						let content_obj = {};
+						contents.forEach((item, index) => {
+							let content_view = plus.webview.create('./pages/'+item, item);
+							self.append(content_view);
+							content_obj[item] = content_view;
+						})
+						return content_obj;
+					}
+				})
+				
+			})(mui, window)
+		</script>
+	</body>
+
+</html>

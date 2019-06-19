@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+    <title></title>
+    <link href="css/mui.min.css" rel="stylesheet"/>
+	 <script src="js/mui.min.js"></script>
+</head>
+<body>
+	<script type="text/javascript">
+		(function ($, doc) {
+			$.init();
+			
+			$.plusReady(function () {
+				let self = plus.webview.currentWebview();
+				createFooterWebview(self);
+				createMainWebview(self);
+				createHeaderWebview(self);
+			})
+			
+			function createHeaderWebview(current) {
+				let header_webview = plus.webview.create('header.html', 'header.html', {
+					height: '50px',
+					zindex: 10
+				})
+				current.append(header_webview);
+				return header_webview;
+			}
+			
+			function createFooterWebview(current) {
+				let footer_webview = plus.webview.create( 'footer.html', 'footer.html', {
+					height: '50px',
+					bottom: '0px',
+					zindex: 10
+				});
+				current.append(footer_webview);
+				return footer_webview;
+			}
+			
+			function createMainWebview(current) {
+				let main_webview = plus.webview.create( 'main.html', 'main.html', {
+					bottom: '50px',
+					top: '50px'
+				});
+				current.append(main_webview);
+				return main_webview;
+			}
+		})(mui, window)
+	</script>
+</body>
+</html>
